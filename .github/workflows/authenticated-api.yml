@@ -1,0 +1,34 @@
+name: Authenticated API Trigger
+
+on:
+  pull_request:
+  workflow_dispatch:
+
+jobs:
+  call-api:
+    runs-on: ubuntu-latest
+    environment: corestack
+
+    steps:
+      - name: Get CoreStack Bearer Token
+        id: raise_alert_for_corestack
+        run: |
+          response=$(curl -s -X POST https://api-qa.corestack.io/v1/auth/tokens \
+            -H "Content-Type: application/json" \
+            -d '{"access_key": "${{ secrets.ACCESS_KEY }}", "secret_key": "${{ secrets.SECRET_KEY }}"}')
+
+          echo "Raw auth response: $response"
+
+          token=$(echo "$response" | jq -r '.token.access_token')
+          echo "Token: $token"
+
+          if [[ "$token" == "null" || -z "$token" ]]; then
+            echo "Token not found in response!"
+            exit 1
+          fi
+
+          echo "Calling GET endpoint with token..."
+          resp=$(curl -X GET "https://api-qa.corestack.io/v2/service_account/item/683989df5676d463346c6415" \
+            -H "X-Auth-Token: $token " \
+            -H "Accept: application/json")
+          echo "Service Account response $resp"
