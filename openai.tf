@@ -51,7 +51,7 @@ resource "azurerm_cognitive_deployment" "deployment" {
   }
 
   scale {
-    type     = "Standard"
+    type     = "Premium"
     capacity = local.ptu_count
   }
 }
