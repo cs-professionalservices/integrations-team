@@ -51,7 +51,7 @@ resource "azurerm_cognitive_deployment" "deployment" {
   }
 
   scale {
-    type     = "Standard"
+    type     = "Legacy"
     capacity = local.ptu_count
   }
 }
