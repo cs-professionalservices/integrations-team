@@ -52,7 +52,7 @@ resource "azurerm_cognitive_deployment" "deployment" {
 
   scale {
     type     = "Standard"
-    capacity = local.ptu_count
+    capacity = 10
   }
 }
 
