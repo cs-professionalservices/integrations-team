@@ -2,6 +2,7 @@ locals {
   prefix = "${var.project}-${var.environment}"
    tags = {
     Environment = "Sandbox"
+    Owner = "VE"
   }
 }
 resource "azurerm_resource_group" "this" {
